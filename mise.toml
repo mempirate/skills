@@ -1,0 +1,15 @@
+[tools]
+deno = "2"
+"npm:skills" = "latest"
+
+[tasks.fmt]
+description = "Format all Markdown files"
+run = "deno fmt --prose-wrap preserve '**/*.md'"
+
+[tasks.new]
+description = "Scaffold a new skill with `skills init` and link the root LICENSE"
+usage = 'arg "<name>" help="Skill name (lowercase, hyphens); also the directory name"'
+run = """
+skills init "${usage_name?}"
+ln -s ../LICENSE "${usage_name?}/LICENSE"
+"""
