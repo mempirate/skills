@@ -7,9 +7,19 @@ description = "Format all Markdown files"
 run = "deno fmt --prose-wrap preserve '**/*.md'"
 
 [tasks.new]
-description = "Scaffold a new skill with `skills init` and link the root LICENSE"
+description = "Scaffold a new skill with `skills init` and copy in the root LICENSE"
 usage = 'arg "<name>" help="Skill name (lowercase, hyphens); also the directory name"'
 run = """
 skills init "${usage_name?}"
-ln -s ../LICENSE "${usage_name?}/LICENSE"
+cp LICENSE "${usage_name?}/LICENSE"
+"""
+
+# `skills add` skips symlinks that point outside a skill's directory, so each
+# skill carries a real copy of LICENSE. Run this after editing the root LICENSE.
+[tasks.license]
+description = "Copy the root LICENSE into every skill directory"
+run = """
+for skill in */SKILL.md; do
+  cp LICENSE "$(dirname "$skill")/LICENSE"
+done
 """
